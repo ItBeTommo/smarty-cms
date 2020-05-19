@@ -51,42 +51,10 @@ else {
     $_SESSION['email']=$row['email'];
     $_SESSION['rights']=$row['permissions'];
     if(empty($_POST['remember'])){
-        //If remember me is not checked
-        
-        setcookie("remember", $cookieValue, time() + 1296000);
         echo "success";
-    }else{
-        //Create two variables $authentificator1 and $authentificator2
-        $authentificator1 = bin2hex(openssl_random_pseudo_bytes(10));
-        //2*2*...*2
-        $authentificator2 = openssl_random_pseudo_bytes(20);
-        //Store them in a cookie
-        function f1($a, $b){
-            $c = $a . "," . bin2hex($b);
-            return $c;
-        }
-        $cookieValue = f1($authentificator1, $authentificator2);
-        setcookie("remember", $cookieValue, time() + 1296000);
-        
-        //Run query to store them in rememberme table
-        function f2($a){
-            $b = hash('sha256', $a); 
-            return $b;
-        }
-        $f2authentificator2 = f2($authentificator2);
-        $user_id = $_SESSION['id'];
-        $expiration = date('Y-m-d H:i:s', time() + 1296000);
-        
-        $sql = "INSERT INTO rememberme
-        (`authentificator1`, `f2authentificator2`, `user_id`, `expires`)
-        VALUES
-        ('$authentificator1', '$f2authentificator2', '$user_id', '$expiration')";
-        $result = mysqli_query($connect, $sql);
-        if(!$result){
-            echo  '<div class="alert alert-danger">There was an error storing data to remember you next time.</div>';  
-        }else{
-            echo "success";   
-        }
+    } else {
+        echo "success";   
+    }
     }
 }
     }
